@@ -1,15 +1,22 @@
 {
-    "name": "demis/ip2_project",
-    "autoload": {
-        "psr-4": {
-            "Demis\\Ip2Project\\": "app/"
-        }
+  "name": "demis/ip2_project",
+  "autoload": {
+    "psr-4": {
+      "App\\Controllers\\": "App/Controllers/",
+      "App\\Models\\": "App/Models/",
+      "App\\Core\\": "App/Core/",
+      "App\\Views\\": "App/Views/",
+      "App\\Helpers\\": "App/Helpers"
     },
-    "authors": [
-        {
-            "name": "Demis Getachew",
-            "email": "demisgech@gmail.com"
-        }
-    ],
-    "require": {}
+    "files": [
+      "App/Helpers/view.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "Demis Getachew",
+      "email": "demisgech@gmail.com"
+    }
+  ],
+  "require": {}
 }
