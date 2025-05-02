@@ -34,3 +34,35 @@
   height: 180px;
   object-fit: cover;
 }
+
+.card-hover-bg:hover {
+  background-color: #f8f9fa !important; /* Slightly lighter gray (you can tweak this) */
+}
+
+.heading-with-border {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    #ff7a18,
+    #af002d,
+    #320b86
+  ); /* Cool gradient */
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.heading-with-border::after {
+  content: "";
+  position: absolute;
+  bottom: -5px; /* Adjust for a little space below */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%; /* Dynamically adjust based on the text length */
+  height: 2px;
+  background-color: #e600ff; /* Customize border color */
+  border-radius: 5px; /* Rounded corners for the border */
+}

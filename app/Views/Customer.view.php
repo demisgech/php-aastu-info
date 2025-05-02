@@ -1,23 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer</title>
-</head>
+use function App\Helpers\load_view_component;
 
-<body>
-    <h1>Hello world! Wolcome to customers page</h1>
+load_view_component("Layouts.header", $customers);
+?>
+<h1>Hello world! Wolcome to customers page</h1>
 
-    <ul class="list-group">
-        <?php foreach ($customers as $customer): ?>
-            <li class="list-group-item">
-                <strong><?= $customer['name'] ?></strong>
-                <?= $customer['email'] ?>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-</body>
+<ul class="list-group">
+    <?php foreach ($customers as $customer): ?>
+        <li class="list-group-item">
+            <strong><?= $customer['name'] ?></strong>
+            <?= $customer['email'] ?>
+        </li>
+    <?php endforeach; ?>
+</ul>
 
-</html>
+<?php load_view_component("Layouts.footer") ?>
