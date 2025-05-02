@@ -6,10 +6,12 @@
       "App\\Models\\": "App/Models/",
       "App\\Core\\": "App/Core/",
       "App\\Views\\": "App/Views/",
-      "App\\Helpers\\": "App/Helpers"
+      "App\\Helpers\\": "App/Helpers",
+      "App\\Routes\\": "App/Routes"
     },
     "files": [
-      "App/Helpers/utils.php"
+      "App/Helpers/utils.php",
+      "App/Routes/route.php"
     ]
   },
   "authors": [

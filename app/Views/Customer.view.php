@@ -8,7 +8,16 @@
 </head>
 
 <body>
-    <h1>Hello world</h1>
+    <h1>Hello world! Wolcome to customers page</h1>
+
+    <ul class="list-group">
+        <?php foreach ($customers as $customer): ?>
+            <li class="list-group-item">
+                <strong><?= $customer['name'] ?></strong>
+                <?= $customer['email'] ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 </body>
 
 </html>

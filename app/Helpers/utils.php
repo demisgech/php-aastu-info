@@ -11,7 +11,7 @@ function view(string $viewName, array $data) {
     if (file_exists($viewFile))
         require($viewFile);
     else
-        die("{$viewFile} is not found!!!");
+        die("View {$viewFile} is not found!!!");
 }
 
 
@@ -26,4 +26,12 @@ function load_view_component(string $viewName, array $data = []) {
     else
         die("{$viewFile} is not found!!!");
 
+}
+
+function getBasePath(string $path) {
+    $path_url = dirname(__DIR__) . "/{$path}";
+    if (file_exists($path_url))
+        return $path_url;
+    else
+        exit("{$path_url} is not found!!");
 }

@@ -3,11 +3,13 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
-// use App\Controllers\HomeController;
-use App\Controllers\AdmissionController;
+use function App\Routes\router;
 
-$controller = new AdmissionController();
 
-$controller->index();
+$path = $_SERVER['REQUEST_URI'];
+$method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+
+router()->route($path, $method);
+
 
 

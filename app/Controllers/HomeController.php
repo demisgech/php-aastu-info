@@ -9,6 +9,7 @@ use App\Core\Controller;
 use App\Models\Home;
 
 class HomeController extends Controller {
+
     public function index(): void {
         $home = new Home();
         $data = $home->getData();

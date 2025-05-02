@@ -12,7 +12,7 @@ class CustomerController extends Controller {
         $customer = new Customer();
         $customersData = $customer->all();
 
-        $this->views("index", [
+        $this->views("customer", [
             "customers" => $customersData
         ]);
     }
