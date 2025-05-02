@@ -9,9 +9,11 @@
 
 .hero-img {
   max-width: 100%;
+  width: 100%;
   height: auto;
+  object-fit: cover;
   border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); */
 }
 
 .hero-btn {

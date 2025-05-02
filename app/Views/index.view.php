@@ -8,14 +8,14 @@ require "Layouts/header.php";
     <?php require("Layouts/feature-grid.php") ?>
     <?php require("Layouts/chatbot-section.php") ?>
 
-    <!-- <ul class="list-group">
+    <ul class="list-group">
         <?php foreach ($customers as $customer): ?>
             <li class="list-group-item">
                 <strong><?= htmlspecialchars($customer['name']) ?></strong>
                 <?= htmlspecialchars($customer['email']) ?>
             </li>
         <?php endforeach ?>
-    </ul> -->
+    </ul>
 
 </div>
 <?php

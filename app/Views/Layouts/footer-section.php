@@ -6,7 +6,7 @@
                 <!-- Logo Section -->
                 <div class="col-md-3 mb-4">
                     <img src="/assets/images/aastu-logo.png" alt="Logo" width="40" class="mb-2">
-                    <h5 class="fw-bold">AwesomeBrand</h5>
+                    <h5 class="fw-bold">AASTUINFO</h5>
                     <p class="text-muted small">Innovating the future, one step at a time.</p>
                 </div>
 

@@ -14,35 +14,17 @@
 
         <!-- Responsive Card Row -->
         <div class="row g-4">
-            <div class="col-12 col-md-4">
-                <div class="card h-100">
-                    <img src="/assets/images/alex.jpg" class="card-img-top" alt="Tech">
-                    <div class="card-body">
-                        <h5 class="card-title">Key Academic Programs and Opportunities</h5>
-                        <p class="card-text">Explore a diverse range of undergraduate and postgraduate programs.</p>
+            <?php foreach ($data as $feature): ?>
+                <div class="col-12 col-md-4">
+                    <div class="card h-100">
+                        <img src="<?= $feature['image_url'] ?>" class="card-img-top" alt="Tech">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= $feature['title'] ?></h5>
+                            <p class="card-text"><?= $feature['description'] ?></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-12 col-md-4">
-                <div class="card h-100">
-                    <img src="/assets/images/alex.jpg" class="card-img-top" alt="Design">
-                    <div class="card-body">
-                        <h5 class="card-title">Admissions Made Easy for Future Students</h5>
-                        <p class="card-text">ind all the information you need to apply.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-4">
-                <div class="card h-100">
-                    <img src="/assets/images/alex.jpg" class="card-img-top" alt="Development">
-                    <div class="card-body">
-                        <h5 class="card-title">Engage with Campus Life and Activities</h5>
-                        <p class="card-text">Get involved in clubs and organizations that inspire.</p>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach ?>
         </div>
     </div>
 </section>

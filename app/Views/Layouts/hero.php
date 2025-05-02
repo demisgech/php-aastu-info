@@ -12,7 +12,7 @@
 
             <!-- Right Image Column -->
             <div class="col-lg-6 text-center">
-                <img src="/assets/images/aastu-logo.png" alt="Hero Image" class="hero-img">
+                <img src="/assets/images/aastu-logo.png" alt="Hero Image" class="img-fluid w-75">
             </div>
         </div>
     </div>

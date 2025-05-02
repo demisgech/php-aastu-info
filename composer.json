@@ -9,7 +9,7 @@
       "App\\Helpers\\": "App/Helpers"
     },
     "files": [
-      "App/Helpers/view.php"
+      "App/Helpers/utils.php"
     ]
   },
   "authors": [
