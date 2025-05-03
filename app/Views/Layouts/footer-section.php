@@ -76,9 +76,9 @@
 
             <!-- Right: Social Icons -->
             <div>
-                <a href="#" class="text-muted me-3">😀<i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-muted me-3">🏠<i class="bi bi-twitter-x"></i></a>
-                <a href="#" class="text-muted">✅<i class="bi bi-instagram"></i></a>
+                <a href="#" class="text-muted me-3"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-muted me-3"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="text-muted"><i class="bi bi-instagram"></i></a>
             </div>
 
         </div>

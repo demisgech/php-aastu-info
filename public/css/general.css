@@ -66,3 +66,11 @@
   background-color: #e600ff; /* Customize border color */
   border-radius: 5px; /* Rounded corners for the border */
 }
+
+.card-section .col-lg-4:nth-child(n + 4) {
+  display: none;
+}
+
+.card-section.expanded .col-lg-4 {
+  display: block;
+}

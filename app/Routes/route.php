@@ -6,6 +6,7 @@ namespace App\Routes;
 
 use App\Controllers\AcademicsController;
 use App\Controllers\AdmissionController;
+use App\Controllers\ClubsController;
 use App\Controllers\CustomerController;
 use App\Controllers\HomeController;
 
@@ -16,5 +17,6 @@ function router() {
     $router->get("/admission", AdmissionController::class);
     $router->get("/customer", CustomerController::class);
     $router->get("/academics", AcademicsController::class);
+    $router->get("/clubs", ClubsController::class);
     return $router;
 }

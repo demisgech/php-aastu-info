@@ -27,7 +27,7 @@
                         Student Life
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Clubs</a></li>
+                        <li><a class="dropdown-item" href="/clubs">Clubs</a></li>
                         <li><a class="dropdown-item" href="#">Blocks</a></li>
                         <li>
                             <hr class="dropdown-divider">

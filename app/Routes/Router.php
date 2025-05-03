@@ -45,7 +45,7 @@ class Router {
         $path = parse_url($url, PHP_URL_PATH);
         $method = strtoupper($method);
 
-        $controllerMatched = false;
+        $controllerMatched = true;
 
         foreach ($this->routes as $route) {
             if ($route['method'] === $method
@@ -65,7 +65,7 @@ class Router {
             }
         }
 
-        if ($controllerMatched)
+        if (!$controllerMatched)
             $this->abort(500);// method not found
         $this->abort();
     }

@@ -16,7 +16,7 @@
                     <?php foreach ($data as $media): ?>
                         <li class="d-flex mb-4">
                             <div class="me-3">
-                                <i class="bi bi-speedometer2 fs-2 text-primary">✅</i>
+                                <i class="bi bi-speedometer2 fs-2 text-primary"></i>
                             </div>
                             <div>
                                 <h5 class="mb-1"><?= $media['title'] ?></h5>
