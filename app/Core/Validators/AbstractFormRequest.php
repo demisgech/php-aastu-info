@@ -8,7 +8,7 @@ abstract class AbstractFormRequest {
     protected array $errors;
     protected array $validData;
 
-    abstract public function rules(): array;
+    abstract protected function rules(): array;
 
     /**
      * @throws ValidationException

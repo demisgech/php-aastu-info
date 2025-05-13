@@ -6,7 +6,7 @@ namespace App\Core\Validators;
 
 class LoginFormRequest extends AbstractFormRequest {
 
-    public function rules(): array {
+    protected function rules(): array {
         return [
             "email" => "sanitize:trim,strip,email|required|email",
             "password" => "sanitize:trim,strip"
