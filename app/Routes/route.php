@@ -10,6 +10,7 @@ use App\Controllers\ClubsController;
 use App\Controllers\CustomerController;
 use App\Controllers\HomeController;
 use App\Controllers\StudentUnionController;
+use App\Controllers\UserController;
 
 function router() {
     $router = new Router();
@@ -19,5 +20,6 @@ function router() {
     $router->get("/academics", AcademicsController::class);
     $router->get("/clubs", ClubsController::class);
     $router->get("/student-union", StudentUnionController::class);
+    $router->get("/users", UserController::class);
     return $router;
 }
