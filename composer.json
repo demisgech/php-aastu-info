@@ -1,15 +1,8 @@
 {
-  "name": "ip2_project",
+  "name": "demis/ip2_project",
   "autoload": {
     "psr-4": {
-      "App\\Controllers\\": "App/Controllers/",
-      "App\\Models\\": "App/Models/",
-      "App\\Databases\\": "App/Databases/",
-      "App\\Core\\": "App/Core/",
-      "App\\Views\\": "App/Views/",
-      "App\\Helpers\\": "App/Helpers",
-      "App\\Routes\\": "App/Routes",
-      "Config\\": "config/"
+      "App\\": "App/"
     },
     "files": [
       "App/Helpers/utils.php",
