@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Routes;
+namespace App\Http\Routes;
 
 class Router {
     private array $routes = [];

@@ -49,8 +49,6 @@ class UserController extends Controller {
             "password" => $_POST["password"]
         ];
 
-        // echo json_encode($formData, JSON_PRETTY_PRINT);
-
         try {
 
             $userFormRequest = new UserRegistrationFormRequest();
@@ -58,8 +56,6 @@ class UserController extends Controller {
 
             $validData = $userFormRequest->validData();
             $validData['profile_url'] = $imageUrl;
-
-            // echo json_encode($validData, JSON_PRETTY_PRINT);
 
             $this->user->create($validData);
 
