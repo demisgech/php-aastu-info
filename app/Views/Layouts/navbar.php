@@ -13,13 +13,12 @@
         <div class="collapse navbar-collapse" id="navbarScroll">
             <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                 <li class="nav-item">
-                    <a class="nav-link" href="/academics">Academics</a>
+                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/users" ? "active custom-bottom-border" : "" ?>"
+                        href="/users">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/admission">Admission</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/student-union">Student Union</a>
+                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/posts" ? "active custom-bottom-border" : "" ?>"
+                        href="/posts">Posts</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -33,10 +32,14 @@
                             <hr class="dropdown-divider">
                         </li>
                         <li><a class="dropdown-item" href="#">Religious Association</a></li>
+                        <li><a class="dropdown-item" href="/admission">Admission</a></li>
+                        <li><a class="dropdown-item" href="/academics">Academics</a></li>
+                        <li><a class="dropdown-item" href="/student-union">Student-Union</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">About us</a>
+                    <a class="nav-link active <?= $_SERVER['REQUEST_URI'] === "/about" ? "active custom-bottom-border" : "" ?>"
+                        aria-current="page" href="#">About us</a>
                 </li>
                 <li class="nav-item">
                     <a class="btn btn-outline-success" aria-disabled="true">Contct Us</a>
@@ -52,10 +55,12 @@
             <!-- Profile Dropdown -->
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Login</a>
+                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/login" ? "active custom-bottom-border" : "" ?>"
+                        href="#">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Register</a>
+                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/users/create" ? "active custom-bottom-border" : "" ?>"
+                        href="/users/create">Register</a>
                 </li>
 
                 <li class="nav-item dropdown">

@@ -7,7 +7,7 @@ load_view_component("Layouts.header");
 
 <div class="container">
     <div class="container m-auto my-5 w-50">
-        <form action="/users/store" method="POST" enctype="multipart/form-data" class="p-4 border rounded bg-light">
+        <form action="/users" method="POST" enctype="multipart/form-data" class="p-4 border rounded bg-light">
             <div class="mb-3">
                 <label for="first_name" class="form-label">First Name</label>
                 <input type="text" class="form-control" id="first_name" name="first_name" required>

@@ -32,7 +32,6 @@ class UserController extends Controller {
         $this->views("Users.create-user");
     }
     public function store() {
-        // header("Content-Type: Application/json");
 
         $imageUrl = null;
 

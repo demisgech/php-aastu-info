@@ -11,7 +11,7 @@ load_view_component("Layouts.header", $user);
                     class="card-img-top rounded-circle mx-auto d-block mt-3" alt="Profile"
                     style="width: 150px; height: 150px; object-fit: cover;">
 
-                <div class="card-body">
+                <div class="card-body position-relative">
                     <h4 class="card-title text-center">
                         <?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name']) ?>
                     </h4>
@@ -54,11 +54,14 @@ load_view_component("Layouts.header", $user);
                         </div>
                     </form>
 
-                    <!-- DELETE FORM (simulating DELETE) -->
-                    <form action="/users/<?= (int) $user['id'] ?>" method="POST" class="mt-3"
-                        onsubmit="return confirm('Are you sure you want to delete this user?');">
+                    <!-- Delete Form and Button -->
+                    <form id="delete-form-<?= (int) $user['id'] ?>" class="position-absolute bottom-0 end-0 me-3 mb-3"
+                        action="/users/<?= $user['id'] ?>" method="POST" class="d-inline">
                         <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="btn btn-danger w-100">Delete User</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteModal" data-form-id="delete-form-<?= $user['id'] ?>">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
                     </form>
 
                 </div>
@@ -67,4 +70,5 @@ load_view_component("Layouts.header", $user);
     </div>
 </div>
 
+<?php load_view_component("Layouts.delete_modal"); ?>
 <?php load_view_component("Layouts.footer"); ?>

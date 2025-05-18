@@ -9,6 +9,7 @@ use App\Controllers\AdmissionController;
 use App\Controllers\ClubsController;
 use App\Controllers\CustomerController;
 use App\Controllers\HomeController;
+use App\Controllers\PostController;
 use App\Controllers\StudentUnionController;
 use App\Controllers\UserController;
 
@@ -22,12 +23,20 @@ function router() {
     $router->get("/student-union", [StudentUnionController::class, "index"]);
 
     $router->get("/users", [UserController::class, "index"]);
-    $router->post("/users/store", [UserController::class, "store"]);
+    $router->post("/users", [UserController::class, "store"]);
 
     $router->get("/users/create", [UserController::class, "create"]);
     $router->get("/users/{id}", [UserController::class, "show"]);
     $router->put("/users/{id}", [UserController::class, "update"]);
     $router->delete("/users/{id}", [UserController::class, "delete"]);
+
+    $router->get("/posts", [PostController::class, "index"]);
+    $router->post("/posts", [PostController::class, "store"]);
+
+    // $router->get("/posts/{user_id}", [PostController::class, "getPostByUser"]);
+    $router->get("/posts/{id}", [PostController::class, "show"]);
+    $router->put("/posts/{id}", [PostController::class, "update"]);
+    $router->delete("/posts/{id}", [PostController::class, "delete"]);
 
     return $router;
 }
