@@ -47,20 +47,19 @@ class Router {
         $method = strtoupper($method);
 
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method && $path === $route['path']) {
-                if (is_array($route['controller'])) {
-                    [$class, $action] = $route['controller'];
-                    $controller = new $class();
-                } else {
-                    $class = $route['controller'];
-                    $controller = new $class();
-                    $action = "index"; // Default method
-                }
+            $routePath = $route['path'];
 
-                if (method_exists($controller, $action))
-                    return $controller->$action();
-                else
-                    $this->abort(500); // Method doesn't exist
+            // Match dynamic segments like /users/{id}
+            $pattern = preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '([^/]+)', $routePath);
+            $pattern = "@^" . $pattern . "$@D";
+
+            if ($route['method'] === $method && preg_match($pattern, $path, $matches)) {
+                array_shift($matches); // Remove full match
+
+                [$class, $action] = $route['controller'];
+                $controller = new $class();
+
+                return call_user_func_array([$controller, $action], $matches);
             }
         }
         $this->abort();

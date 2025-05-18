@@ -20,8 +20,14 @@ function router() {
     $router->get("/academics", [AcademicsController::class, "index"]);
     $router->get("/clubs", [ClubsController::class, "index"]);
     $router->get("/student-union", [StudentUnionController::class, "index"]);
+
     $router->get("/users", [UserController::class, "index"]);
-    $router->get("/users/create", [UserController::class, "create"]);
     $router->post("/users/store", [UserController::class, "store"]);
+
+    $router->get("/users/create", [UserController::class, "create"]);
+    $router->get("/users/{id}", [UserController::class, "show"]);
+    $router->put("/users/{id}", [UserController::class, "update"]);
+    $router->delete("/users/{id}", [UserController::class, "delete"]);
+
     return $router;
 }

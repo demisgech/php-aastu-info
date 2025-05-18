@@ -56,25 +56,18 @@ class User {
 
     public function update(
         int $id,
-        string $firstName,
-        string $lastName,
-        string $password,
-        string $profileUrl
+        array $data = []
     ) {
-        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
         $sql = <<<SQL
             UPDATE users SET first_name = :first_name,
                             last_name = :last_name,
-                            password = :password,
                             profile_url = :profile_url
             WHERE id = :id;
         SQL;
         return $this->database->query($sql, [
-            "first_name" => $firstName,
-            "last_name" => $lastName,
-            "password" => $hashedPassword,
-            "profile_url" => $profileUrl,
+            "first_name" => $data['first_name'],
+            "last_name" => $data['last_name'],
+            "profile_url" => $data['profile_url'],
             "id" => $id
         ]);
     }
