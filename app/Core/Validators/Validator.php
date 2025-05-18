@@ -12,6 +12,7 @@ class Validator {
     private array $errors = [];
 
     public function __construct(array $data, array $rules) {
+        $data = array_merge($data, $_FILES);// Merge uploaded files
         $this->data = $data;
         $this->rules = $rules;
     }
@@ -24,8 +25,13 @@ class Validator {
             [$sanitizers, $validators] = $this->extractSanitizeAndValidateRules($ruleString);
 
             // Apply sanitization
-            foreach ($sanitizers as $sanitizer)
-                $value = $this->sanitize($value, $sanitizer);
+
+
+            $isFile = is_array($value) && isset($value['tmp_name']);
+            if (!$isFile) {
+                foreach ($sanitizers as $sanitizer)
+                    $value = $this->sanitize($value, $sanitizer);
+            }
             // store sanitizedData value
             $this->sanitizedData[$field] = $value;
 
@@ -88,13 +94,31 @@ class Validator {
 
         if (str_starts_with($rule, "max:")) {
             $max = (int) explode(":", $rule)[1];
-            if (strlen($value) > $max)
+            if (is_string($value) && strlen($value) > $max)
                 $this->errors[$field][] = "{$field} must be at most {$max} characters";
 
+            if (is_array($value) && isset($value['size']) && $value['size'] > $max * 1024) {
+                $this->errors[$field][] = "{$field} must not exceed {$max} KB";
+            }
         }
 
         if ($rule === "url" && !filter_var($value, FILTER_VALIDATE_URL))
             $this->errors[$field][] = "{$field} must be valid url";
+
+        // File upload check
+        if ($rule === "file") {
+            if (!isset($value['error']) || $value['error'] !== UPLOAD_ERR_OK) {
+                $this->errors[$field][] = "{$field} must be a valid uploaded file";
+            }
+        }
+
+        if (str_starts_with($rule, "mimes:")) {
+            $allowed = explode(",", explode(":", $rule)[1]);
+            $ext = pathinfo($value['name'] ?? '', PATHINFO_EXTENSION);
+            if (!in_array(strtolower($ext), $allowed)) {
+                $this->errors[$field][] = "{$field} must be a file of type: " . implode(", ", $allowed);
+            }
+        }
     }
 
     public function errors(): array {

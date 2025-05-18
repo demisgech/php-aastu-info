@@ -7,34 +7,34 @@ namespace App\Routes;
 class Router {
     private array $routes = [];
 
-    private function add(string $path, mixed $controller, string $method) {
+    private function add(string $path, mixed $handler, string $method) {
         $this->routes[] = [
-            "path" => $path,
-            "controller" => $controller,
-            "method" => $method
+            "path" => $this->normalizePath($path),
+            "controller" => $handler,
+            "method" => strtoupper($method),
         ];
 
         return $this;
     }
 
-    public function get(string $path, mixed $controller) {
-        return $this->add($path, $controller, "GET");
+    public function get(string $path, array $handler) {
+        return $this->add($path, $handler, "GET");
     }
 
-    public function post(string $path, mixed $controller) {
-        return $this->add($path, $controller, "POST");
+    public function post(string $path, array $handler) {
+        return $this->add($path, $handler, "POST");
     }
 
-    public function put(string $path, mixed $controller) {
-        return $this->add($path, $controller, "PUT");
+    public function put(string $path, array $handler) {
+        return $this->add($path, $handler, "PUT");
     }
 
-    public function patch(string $path, mixed $controller) {
-        return $this->add($path, $controller, "PATCH");
+    public function patch(string $path, array $handler) {
+        return $this->add($path, $handler, "PATCH");
     }
 
-    public function delete(string $path, mixed $controller) {
-        return $this->add($path, $controller, "DELETE");
+    public function delete(string $path, array $handler) {
+        return $this->add($path, $handler, "DELETE");
     }
 
     public function only(string $key) {
@@ -42,32 +42,32 @@ class Router {
     }
 
     public function route(string $url, string $method) {
-        $path = parse_url($url, PHP_URL_PATH);
+        $path = $this->normalizePath(parse_url($url, PHP_URL_PATH));
+
         $method = strtoupper($method);
 
-        $controllerMatched = true;
-
         foreach ($this->routes as $route) {
-            if ($route['method'] === $method
-                && ($path === $route['path'] || str_starts_with($path, $route['path'] . "/"))
-            ) {
-                $controller = new $route['controller']();
+            if ($route['method'] === $method && $path === $route['path']) {
+                if (is_array($route['controller'])) {
+                    [$class, $action] = $route['controller'];
+                    $controller = new $class();
+                } else {
+                    $class = $route['controller'];
+                    $controller = new $class();
+                    $action = "index"; // Default method
+                }
 
-                // Get the remaining part of the path after the main path
-                $action = trim(str_replace($route['path'], "", $path), "/");
-
-                $action = $action === "" ? "index" : $action;
                 if (method_exists($controller, $action))
                     return $controller->$action();
-
-                $controllerMatched = true;
-
+                else
+                    $this->abort(500); // Method doesn't exist
             }
         }
-
-        if (!$controllerMatched)
-            $this->abort(500);// method not found
         $this->abort();
+    }
+
+    private function normalizePath(string $path): string {
+        return rtrim($path, "/") ?: "/";
     }
 
     protected function abort(int $statusCode = 404) {

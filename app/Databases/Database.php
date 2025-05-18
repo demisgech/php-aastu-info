@@ -8,6 +8,7 @@ namespace App\Databases;
 use Config\AppConfig;
 
 use PDO;
+use PDOException;
 use PDOStatement;
 use RuntimeException;
 
@@ -36,8 +37,9 @@ class Database {
                 PDO::ERRMODE_EXCEPTION
             );
 
-        } catch (RuntimeException $ex) {
-            throw $ex;
+        } catch (PDOException $ex) {
+            error_log($ex->getMessage());
+            throw new RuntimeException("Connection failed!");
         }
     }
 
@@ -49,7 +51,7 @@ class Database {
 
     public function destroyDatabaseInstance(): void {
         if ($this->pdoConnection !== null)
-            static::$pdoConnection = null;
+            $this->pdoConnection = null;
         if (static::$databaseInstance === null)
             static::$databaseInstance = null;
     }
@@ -62,5 +64,8 @@ class Database {
 
     public function fetchAll() {
         return $this->statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function fetchOne(): mixed {
+        return $this->statement->fetch(PDO::FETCH_ASSOC);
     }
 }

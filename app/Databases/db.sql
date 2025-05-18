@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS aastu_info;
+
 USE aastu_info;
 
 CREATE TABLE IF NOT EXISTS roles (
@@ -11,10 +12,18 @@ CREATE TABLE IF NOT EXISTS users (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,  -- Store hashed passwords securely
+    -- Store hashed passwords securely
+    password VARCHAR(255) NOT NULL,
     profile_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- User ↔ Role (many-to-many)
+CREATE TABLE IF NOT EXISTS user_roles (
+    user_id INT NOT NULL,
     role_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
@@ -26,7 +35,7 @@ CREATE TABLE IF NOT EXISTS university (
     description TEXT,
     contact_email VARCHAR(100),
     website_url VARCHAR(255),
-    image_url VARCHAR(255)  -- University logo or image
+    image_url VARCHAR(255) -- University logo or image
 );
 
 CREATE TABLE IF NOT EXISTS clubs (
@@ -34,7 +43,8 @@ CREATE TABLE IF NOT EXISTS clubs (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     contact_email VARCHAR(100),
-    image_url VARCHAR(255),  -- Club logo or image
+    image_url VARCHAR(255),
+    -- Club logo or image
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -44,7 +54,8 @@ CREATE TABLE IF NOT EXISTS blocks (
     description TEXT,
     location VARCHAR(255),
     office_email VARCHAR(100),
-    image_url VARCHAR(255),  -- Block/building image
+    image_url VARCHAR(255),
+    -- Block/building image
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -85,6 +96,7 @@ CREATE TABLE IF NOT EXISTS posts (
     content TEXT NOT NULL,
     published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_id INT NOT NULL,
-    image_url VARCHAR(255),  -- Post feature image
+    image_url VARCHAR(255),
+    -- Post feature image
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
