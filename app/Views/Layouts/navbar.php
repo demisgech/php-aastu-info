@@ -16,10 +16,12 @@
                     <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/users" ? "active custom-bottom-border" : "" ?>"
                         href="/users">Users</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/posts" ? "active custom-bottom-border" : "" ?>"
-                        href="/posts">Posts</a>
-                </li>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/posts" ? "active custom-bottom-border" : "" ?>"
+                            href="/posts">Posts</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
@@ -72,8 +74,8 @@
                             <span><?= $_SESSION['user']['full_name'] ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li><a href="#" class="dropdown-item">Profile</a></li>
-                            <li><a href="#" class="dropdown-item">Settings</a></li>
+                            <li><a href="/users/<?= $_SESSION['user']['id'] ?>" class="dropdown-item">Profile</a></li>
+                            <!-- <li><a href="#" class="dropdown-item">Settings</a></li> -->
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>

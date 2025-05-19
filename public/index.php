@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Session;
+
 session_start();
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -12,3 +14,4 @@ $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 
 router()->route($path, $method);
 
+Session::unFlash();

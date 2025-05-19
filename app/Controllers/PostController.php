@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Forms\FileUploads\FileUploadException;
 use App\Core\Forms\PostFormRequest;
 use App\Core\Forms\URLIDRequest;
 use App\Core\Forms\FileUploads\FileUploader;
 use App\Core\Validators\ValidationException;
+use App\Http\Redirect;
+use App\Http\Session;
 use App\Models\Post;
 
 class PostController extends Controller {
@@ -26,45 +29,51 @@ class PostController extends Controller {
     }
 
     public function store() {
-        // header("Content-Type: application/json");
-        $imageUrl = null;
-
-        if (isset($_FILES['image_url'])) {
-            $uploader = new FileUploader($_FILES['profile_url']);
-            $uploader->upload();
-
-            $imageUrl = $uploader->getRelativePath();
-        }
 
         $formData = [
             "title" => $_POST["title"],
             "content" => $_POST["content"],
         ];
         try {
+
+            $imageUrl = null;
+            try {
+                if (isset($_FILES['image_url'])) {
+                    $uploader = new FileUploader($_FILES['profile_url']);
+                    $uploader->upload();
+
+                    $imageUrl = $uploader->getRelativePath();
+                }
+            } catch (FileUploadException $ex) {
+                Session::flash("errors", [
+                    "image_url" => $ex->getMessage()
+                ]);
+            }
+
             $urlId = new URLIDRequest();
-            $userId = 13; // Till user authentication
+            $userId = $_SESSION['user']['id'];// Get userId from authenticated user
 
             $urlId->validate([
-                // "id" => $_GET['user_id']
                 "id" => $userId
             ]);
-            $validIDData = $urlId->validData();
+
+            $validUserId = $urlId->validData()['id'];
 
             $formRequest = new PostFormRequest();
             $formRequest->validate($formData);
             $validData = $formRequest->validData();
-            $validData['user_id'] = $validIDData['id'];
+            $validData['user_id'] = $validUserId;
             $validData['image_url'] = $imageUrl;
 
-            echo json_encode($validData);
+            // echo json_encode($validData);
 
             $this->post->create($validData);
 
-            header("Location: /posts");
-            exit(0);
+            Redirect::to("/posts");
 
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/posts");
         }
     }
 
@@ -80,8 +89,7 @@ class PostController extends Controller {
             $posts = $this->post->getPostByUserId($validUserId);
             // echo json_encode($posts);
 
-            // header("Location: /posts");
-            // exit(0);
+            Redirect::to("/posts");
 
         } catch (ValidationException $ex) {
             echo json_encode($ex->getErrors());
@@ -89,27 +97,23 @@ class PostController extends Controller {
     }
 
     public function show(string|int $id) {
-        $URLId = new URLIDRequest();
-        $URLId->validate([
-            "id" => (int) $id
-        ]);
-        $validPostId = $URLId->validData()['id'];
-        $post = $this->post->getPostById($validPostId);
-        $this->views("Posts.show-post", [
-            "post" => $post
-        ]);
+        try {
+            $URLId = new URLIDRequest();
+            $URLId->validate([
+                "id" => (int) $id
+            ]);
+            $validPostId = $URLId->validData()['id'];
+            $post = $this->post->getPostById($validPostId);
+            $this->views("Posts.show-post", [
+                "post" => $post
+            ]);
+        } catch (ValidationException $ex) {
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/posts/{id}");
+        }
     }
 
     public function update(string|int $postId) {
-        header("Content-Type: application/json");
-        $imageUrl = null;
-
-        if (isset($_FILES['image_url'])) {
-            $uploader = new FileUploader($_FILES['profile_url']);
-            $uploader->upload();
-
-            $imageUrl = $uploader->getRelativePath();
-        }
 
         $formData = [
             "title" => $_POST['title'],
@@ -117,8 +121,20 @@ class PostController extends Controller {
         ];
 
         try {
-            $userId = 13;
+            try {
+                $imageUrl = null;
+                if (isset($_FILES['image_url'])) {
+                    $uploader = new FileUploader($_FILES['profile_url']);
+                    $uploader->upload();
 
+                    $imageUrl = $uploader->getRelativePath();
+                }
+            } catch (FileUploadException $ex) {
+                Session::flash("errors", [
+                    "image_url" => $ex->getMessage()
+                ]);
+            }
+            $userId = $_SESSION['user']['id'];
             $urlUserId = new URLIDRequest();
             $urlUserId->validate([
                 'id' => (int) $userId
@@ -141,17 +157,16 @@ class PostController extends Controller {
             echo json_encode($validData);
 
             $this->post->update($validPostid, $validData);
-            header("Location: /posts");
-            exit(0);
+            Redirect::to("/posts");
 
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/posts/{id}");
         }
-
     }
 
     public function delete(string|int $postId) {
-        header("Content-Type: application/json");
+
         try {
             $postIdUrl = new URLIDRequest();
             $postIdUrl->validate([
@@ -160,11 +175,10 @@ class PostController extends Controller {
 
             $validPostId = $postIdUrl->validData()['id'];
 
-            $userId = 13;
+            $userId = $_SESSION['user']['id'];
 
             $userIdData = new URLIDRequest();
             $userIdData->validate([
-                // "id"=>$_SESSION['user_id'], if user is authenticated
                 "id" => (int) $userId
             ]);
 
@@ -176,11 +190,10 @@ class PostController extends Controller {
             // ]);
 
             $this->post->delete($validPostId, $validUserId);
-            header("Location: /posts");
-            exit(0);
-
+            Redirect::to("/posts");
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/posts/{id}");
         }
     }
 }

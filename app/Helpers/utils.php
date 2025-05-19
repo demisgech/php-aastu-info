@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Helpers;
+use App\Http\Session;
 
 function view(string $viewName, array $data) {
     extract($data);
@@ -37,4 +38,29 @@ function getBasePath(string $path) {
 
 function old(string $key, mixed $default = '') {
     return htmlspecialchars($_POST[$key]) ?? $default;
+}
+
+function showErrorMessage(string $name) {
+    if (array_key_exists("_flashed", $_SESSION)) {
+        if (isset(Session::get("errors")[$name])): ?>
+            <div class="mb-3">
+                <?php if (is_array(Session::get("errors")[$name])): ?>
+                    <?php foreach (Session::get("errors")[$name] as $error): ?>
+                        <p class="text-danger"><?= $error ?></p>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p class="text-danger"><?= Session::get("errors")[$name] ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif;
+    }
+}
+function showFlashedData(string $name) {
+    if (array_key_exists("_flashed", $_SESSION)) {
+        if (isset($_SESSION['_flashed'][$name])): ?>
+            <div class="mb-3 alert alert-danger">
+                <p class="text-danger"><?= $_SESSION['_flashed'][$name] ?></p>
+            </div>
+        <?php endif;
+    }
 }

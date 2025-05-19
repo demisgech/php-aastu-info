@@ -1,6 +1,7 @@
 <?php
 
 use function App\Helpers\load_view_component;
+use function App\Helpers\showErrorMessage;
 
 load_view_component("Layouts.header", $posts);
 
@@ -13,16 +14,19 @@ load_view_component("Layouts.header", $posts);
             <form action="/posts" method="POST">
                 <div class="d-flex align-items-start gap-3">
                     <!-- Profile Image -->
-                    <img src="/assets/images/noImage.png" alt="Profile" class="rounded-circle"
-                        style="width: 64px; height: 64px; object-fit: cover;">
+                    <img src="<?= $_SESSION['user']['profile_url'] ?? "/assets/images/noImage.png" ?>" alt="Profile"
+                        class="rounded-circle" style="width: 64px; height: 64px; object-fit: cover;">
 
                     <!-- Input Section -->
                     <div class="flex-grow-1">
                         <input type="text" class="form-control mb-2" name="title" placeholder="Post title...">
+                        <?= showErrorMessage('title') ?>
                         <textarea class="form-control mb-2" name="content" rows="2" placeholder="What's on your mind?"
                             required></textarea>
+                        <?= showErrorMessage('content') ?>
                         <input type="text" class="form-control mb-2" name="image_url"
                             placeholder="(Optional) image URL">
+                        <?= showErrorMessage('image_url') ?>
                         <div class="text-end">
                             <button type="submit" class="btn btn-primary">Post</button>
                         </div>
@@ -40,8 +44,8 @@ load_view_component("Layouts.header", $posts);
                 <div class="row g-3">
                     <!-- Left: User Info -->
                     <div class="col-md-2 text-center">
-                        <img src="<?= $post['profile_url'] ?? '/assets/img/default-profile.png' ?>"
-                            class="rounded-circle mb-2" alt="Profile" style="width: 64px; height: 64px; object-fit: cover;">
+                        <img src="<?= $post['profile_url'] ?? '/assets/images/noImage.png' ?>" class="rounded-circle mb-2"
+                            alt="Profile" style="width: 64px; height: 64px; object-fit: cover;">
                         <h6 class="mb-0"><?= htmlspecialchars($post['first_name'] . ' ' . $post['last_name']) ?></h6>
                         <small class="text-muted"><?= date('M j, Y g:i a', strtotime($post['published_at'])) ?></small>
                     </div>
@@ -53,7 +57,8 @@ load_view_component("Layouts.header", $posts);
 
                         <?php if (!empty($post['image_url'])): ?>
                             <div class="mb-3">
-                                <img src="<?= $post['image_url'] ?>" class="img-fluid rounded border" alt="Post image"
+                                <img src="<?= $post['image_url'] ?? "/assets/images/noImage.png" ?>"
+                                    class="img-fluid rounded border" alt="Post image"
                                     style="max-height: 400px; object-fit: contain;">
                             </div>
                         <?php endif; ?>
@@ -67,7 +72,7 @@ load_view_component("Layouts.header", $posts);
                             </button>
 
                             <!-- Optional: Only show for the user who owns the post -->
-                            <?php if ($post['user_id'] === ($_SESSION['user_id'] ?? 13)): ?>
+                            <?php if ($post['user_id'] === $_SESSION['user']['id']): ?>
                                 <!-- Edit Button -->
                                 <a href="/posts/<?= $post['post_id'] ?>" class="btn btn-outline-warning btn-sm">
                                     <i class="bi bi-pencil"></i> Edit

@@ -6,8 +6,11 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Validators\LoginFormRequest;
+use App\Core\Validators\ValidationException;
 use App\Http\Redirect;
+use App\Http\Session;
 use App\Services\AuthService;
+
 
 class AuthController extends Controller {
 
@@ -24,19 +27,27 @@ class AuthController extends Controller {
     public function login() {
         $email = $_POST['email'];
         $password = $_POST['password'];
+        $validEmail = "";
 
-        $formRequest = new LoginFormRequest();
-        $formRequest->validate([
-            "email" => $email
-        ]);
-        $validEmail = $formRequest->validData()['email'];
+        try {
 
-        if (!$this->auth->attempt($validEmail, $password))
-            Redirect::back([
-                "error" => "Invalid email or password!!"
+            $formRequest = new LoginFormRequest();
+            $formRequest->validate([
+                "email" => $email
             ]);
+            $validEmail = $formRequest->validData()['email'];
 
-        Redirect::to("/");
+        } catch (ValidationException $ex) {
+            Session::flash("errors", $ex->getErrors());
+        }
+
+        if (!$this->auth->attempt($validEmail, $password)) {
+            Session::flash("errors", [
+                "login_failed" => "Invalid email or password!!!"
+            ]);
+            Redirect::to("/login");
+        }
+        Redirect::to("/posts");
     }
 
     public function logout(): void {

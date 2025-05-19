@@ -6,10 +6,13 @@ namespace App\Controllers;
 
 use App\Core\Controller;
 use App\Core\Forms\FileUploads\FileUploader;
+use App\Core\Forms\FileUploads\FileUploadException;
 use App\Core\Forms\URLIDRequest;
 use App\Core\Forms\UserRegistrationFormRequest;
 use App\Core\Forms\UserUpdateFormRequest;
 use App\Core\Validators\ValidationException;
+use App\Http\Redirect;
+use App\Http\Session;
 use App\Models\User;
 
 
@@ -33,12 +36,6 @@ class UserController extends Controller {
     }
     public function store() {
 
-        $imageUrl = null;
-
-        $uploader = new FileUploader($_FILES['profile_url']);
-        $uploader->upload();
-
-        $imageUrl = $uploader->getRelativePath();
 
 
         $formData = [
@@ -54,17 +51,30 @@ class UserController extends Controller {
             $userFormRequest->validate($formData);
 
             $validData = $userFormRequest->validData();
+
+            $imageUrl = null;
+            try {
+
+                $uploader = new FileUploader($_FILES['profile_url']);
+                $uploader->upload();
+
+                $imageUrl = $uploader->getRelativePath();
+            } catch (FileUploadException $ex) {
+                Session::flash('errors', [
+                    "profile_url" => $ex->getMessage()
+                ]);
+            }
+
             $validData['profile_url'] = $imageUrl;
 
             $this->user->create($validData);
 
-            header("Location: /users");
-            exit(0);
+            Redirect::to("/users");
 
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/users/create");
         }
-
     }
 
     public function update(string|int $id) {
@@ -77,10 +87,16 @@ class UserController extends Controller {
             $formRequest = new UserUpdateFormRequest();
             $formRequest->validate($formData);
             $validData = $formRequest->validData();
-            $uploader = new FileUploader($_FILES['profile_url']);
-            $uploader->upload();
+            try {
 
-            $validData['profile_url'] = $uploader->getRelativePath();
+                $uploader = new FileUploader($_FILES['profile_url']);
+                $uploader->upload();
+
+                $validData['profile_url'] = $uploader->getRelativePath();
+            } catch (FileUploadException $ex) {
+                Session::flash("errors", $ex->getMessage());
+                Redirect::to("/users/{id}");
+            }
 
             $urlId = new URLIDRequest();
 
@@ -92,27 +108,28 @@ class UserController extends Controller {
 
             $this->user->update($validURLData['id'], $validData);
 
-            header("Location: /users");
-            exit(0);
+            Redirect::to("/users");
 
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/users/{id}");
         }
     }
 
     public function delete(string|int $id) {
         try {
-
             $urlId = new URLIDRequest();
             $urlId->validate([
                 "id" => (int) $id
             ]);
             $validData = $urlId->validData();
             $this->user->delete($validData['id']);
-            header("Location: /users");
-            exit(0);
+
+            Redirect::to("/users");
+
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/users/{id}");
         }
     }
 
@@ -135,7 +152,8 @@ class UserController extends Controller {
             ]);
 
         } catch (ValidationException $ex) {
-            echo json_encode($ex->getErrors());
+            Session::flash("errors", $ex->getErrors());
+            Redirect::to("/users/{id}");
         }
     }
 }

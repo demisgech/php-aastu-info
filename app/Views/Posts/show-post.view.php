@@ -1,6 +1,7 @@
 <?php
 
 use function App\Helpers\load_view_component;
+use function App\Helpers\showErrorMessage;
 
 load_view_component("Layouts.header", $post);
 
@@ -14,17 +15,20 @@ load_view_component("Layouts.header", $post);
                 <input type="hidden" name="_method" id="<?= $post['id'] ?>" value="PUT">
                 <div class="d-flex align-items-start gap-3">
                     <!-- Profile Image -->
-                    <img src="/assets/images/noImage.png" alt="Profile" class="rounded-circle"
-                        style="width: 64px; height: 64px; object-fit: cover;">
+                    <img src="<?= $_SESSION['user']['profile_url'] ?? "/assets/images/noImage.png" ?>" alt="Profile"
+                        class="rounded-circle" style="width: 64px; height: 64px; object-fit: cover;">
 
                     <!-- Input Section -->
                     <div class="flex-grow-1">
                         <input type="text" class="form-control mb-2" name="title" placeholder="Post title..."
                             value="<?= $post['title'] ?>">
+                        <?= showErrorMessage("title") ?>
                         <textarea class="form-control mb-2" name="content" rows="2" placeholder="What's on your mind?"
                             required><?= $post['content'] ?></textarea>
+                        <?= showErrorMessage("content") ?>
                         <input type="text" class="form-control mb-2" name="image_url"
                             placeholder="(Optional) image URL">
+                        <?= showErrorMessage("image_url") ?>
                         <div class="text-end">
                             <a href="/posts" class="btn btn-secondary">Cancel</a>
                             <button type="submit" class="ms-2 btn btn-primary">Save Changes</button>
