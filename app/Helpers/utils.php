@@ -34,3 +34,7 @@ function getBasePath(string $path) {
     else
         exit("{$path_url} is not found!!");
 }
+
+function old(string $key, mixed $default = '') {
+    return htmlspecialchars($_POST[$key]) ?? $default;
+}

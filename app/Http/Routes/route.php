@@ -6,6 +6,7 @@ namespace App\Http\Routes;
 
 use App\Controllers\AcademicsController;
 use App\Controllers\AdmissionController;
+use App\Controllers\AuthController;
 use App\Controllers\ClubsController;
 use App\Controllers\CustomerController;
 use App\Controllers\HomeController;
@@ -27,6 +28,10 @@ function router() {
 
     $router->get("/users/create", [UserController::class, "create"]);
     $router->get("/users/{id}", [UserController::class, "show"]);
+
+    // $router->get("/users/{id}/posts", [UserController::class, "notImplemented"]);
+    // $router->get("/users/{user_id}/posts/{post_id}", [UserController::class, "notImplemented"]);
+
     $router->put("/users/{id}", [UserController::class, "update"]);
     $router->delete("/users/{id}", [UserController::class, "delete"]);
 
@@ -37,6 +42,11 @@ function router() {
     $router->get("/posts/{id}", [PostController::class, "show"]);
     $router->put("/posts/{id}", [PostController::class, "update"]);
     $router->delete("/posts/{id}", [PostController::class, "delete"]);
+
+
+    $router->get("/login", [AuthController::class, "index"]); // Login page
+    $router->post("/login", [AuthController::class, "login"]);
+    $router->delete("/logout", [AuthController::class, "logout"]);
 
     return $router;
 }

@@ -83,6 +83,16 @@ class User {
         ]);
     }
 
+    public function findUserByEmail(string $email) {
+        $sql = <<<SQL
+            SELECT * FROM users 
+            WHERE email = :email;
+        SQL;
+        return $this->database
+            ->query($sql, [
+                "email" => $email
+            ])->fetchOne();
+    }
 
     public function __destruct() {
         $this->database->destroyDatabaseInstance();

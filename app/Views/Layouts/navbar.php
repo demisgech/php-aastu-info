@@ -54,33 +54,39 @@
 
             <!-- Profile Dropdown -->
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/login" ? "active custom-bottom-border" : "" ?>"
-                        href="#">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/users/create" ? "active custom-bottom-border" : "" ?>"
-                        href="/users/create">Register</a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" id="profileDropdown"
-                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="/assets/images/bonsa.jpeg" alt="avatar" class="rounded-circle me-2" width="30"
-                            height="30">
-                        <span>Doe John</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a href="#" class="dropdown-item">Profile</a></li>
-                        <li><a href="#" class="dropdown-item">Settings</a></li>
-                        <li>
-                            <hr class="dropdown-divider" />
-                        </li>
-                        <li><a href="#" class="dropdown-item text-danger">Logout</a></li>
-                    </ul>
-                </li>
+                <?php if (!isset($_SESSION['user'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/login" ? "active custom-bottom-border" : "" ?>"
+                            href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $_SERVER['REQUEST_URI'] === "/users/create" ? "active custom-bottom-border" : "" ?>"
+                            href="/users/create">Register</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" id="profileDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="<?= $_SESSION['user']['profile_url'] ?>" alt="avatar" class="rounded-circle me-2"
+                                width="30" height="30">
+                            <span><?= $_SESSION['user']['full_name'] ?></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <li><a href="#" class="dropdown-item">Profile</a></li>
+                            <li><a href="#" class="dropdown-item">Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider" />
+                            </li>
+                            <li>
+                                <form action="/logout" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="dropdown-item text-danger">Logout</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
             </ul>
-
         </div>
     </div>
 </nav>

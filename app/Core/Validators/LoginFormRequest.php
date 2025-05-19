@@ -9,7 +9,7 @@ class LoginFormRequest extends AbstractFormRequest {
     protected function rules(): array {
         return [
             "email" => "sanitize:trim,strip,email|required|email",
-            "password" => "sanitize:trim,strip"
+            // "password" => "sanitize:trim,strip"
         ];
     }
 }
