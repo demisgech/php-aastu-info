@@ -9,10 +9,9 @@ class Redirect {
     /**
      * Redirect to specific url
      */
-    public static function to(string $url, $statusCode = 302): never {
-        http_response_code($statusCode);
+    public static function to(string $url): never {
         header("Location: {$url}");
-        die(0);
+        exit();
     }
 
     public static function back(array $with = []) {

@@ -12,6 +12,7 @@ use App\Controllers\CustomerController;
 use App\Controllers\HomeController;
 use App\Controllers\PostController;
 use App\Controllers\StudentUnionController;
+use App\Controllers\UnauthorizedController;
 use App\Controllers\UserController;
 
 function router() {
@@ -21,22 +22,25 @@ function router() {
     $router->get("/customer", [CustomerController::class, "index"]);
     $router->get("/academics", [AcademicsController::class, "index"]);
     $router->get("/clubs", [ClubsController::class, "index"]);
-    $router->get("/student-union", [StudentUnionController::class, "index"]);
+    $router->get("/student-union", [StudentUnionController::class, "index"])->only('guest');
 
-    $router->get("/users", [UserController::class, "index"]);
-    $router->post("/users", [UserController::class, "store"]);
+    $router->get("/unauthorize", [UnauthorizedController::class, "index"])->only('guest');
 
-    $router->get("/users/create", [UserController::class, "create"]);
+
+    $router->get("/users", [UserController::class, "index"]);//->only('auth');
+    $router->post("/users", [UserController::class, "store"])->only('auth');
+
+    $router->get("/users/create", [UserController::class, "create"])->only('guest');
     $router->get("/users/{id}", [UserController::class, "show"]);
 
     // $router->get("/users/{id}/posts", [UserController::class, "notImplemented"]);
     // $router->get("/users/{user_id}/posts/{post_id}", [UserController::class, "notImplemented"]);
 
-    $router->put("/users/{id}", [UserController::class, "update"]);
-    $router->delete("/users/{id}", [UserController::class, "delete"]);
+    $router->put("/users/{id}", [UserController::class, "update"])->only('auth');
+    $router->delete("/users/{id}", [UserController::class, "delete"])->only('auth');
 
-    $router->get("/posts", [PostController::class, "index"]);
-    $router->post("/posts", [PostController::class, "store"]);
+    $router->get("/posts", [PostController::class, "index"]);//->only('auth');
+    $router->post("/posts", [PostController::class, "store"])->only('auth');
 
     // $router->get("/posts/{user_id}", [PostController::class, "getPostByUser"]);
     $router->get("/posts/{id}", [PostController::class, "show"]);
@@ -44,7 +48,7 @@ function router() {
     $router->delete("/posts/{id}", [PostController::class, "delete"]);
 
 
-    $router->get("/login", [AuthController::class, "index"]); // Login page
+    $router->get("/login", [AuthController::class, "index"])->only('guest'); // Login page
     $router->post("/login", [AuthController::class, "login"]);
     $router->delete("/logout", [AuthController::class, "logout"]);
 

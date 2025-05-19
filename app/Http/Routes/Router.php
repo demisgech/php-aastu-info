@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Routes;
 
+use App\Http\Middlewares\Middleware;
+
 class Router {
     private array $routes = [];
 
@@ -12,6 +14,7 @@ class Router {
             "path" => $this->normalizePath($path),
             "controller" => $handler,
             "method" => strtoupper($method),
+            "middleware" => null
         ];
 
         return $this;
@@ -38,7 +41,8 @@ class Router {
     }
 
     public function only(string $key) {
-        // Not Implemented
+        $this->routes[array_key_last($this->routes)]['middleware'] = $key;
+        return $this;
     }
 
     public function route(string $url, string $method) {
@@ -48,6 +52,9 @@ class Router {
 
         foreach ($this->routes as $route) {
             $routePath = $route['path'];
+
+            if ($route['middleware'])
+                Middleware::resolve($route['middleware']);
 
             // Match dynamic segments like /users/{id}
             $pattern = preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '([^/]+)', $routePath);
