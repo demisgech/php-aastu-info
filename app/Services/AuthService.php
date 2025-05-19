@@ -9,7 +9,7 @@ use App\Models\User;
 
 class AuthService {
 
-    public function attemt(string $email, string $password): bool {
+    public function attempt(string $email, string $password): bool {
         $user = (new User())->findUserByEmail($email);
 
         if (!($user && password_verify($password, $user['password'])))

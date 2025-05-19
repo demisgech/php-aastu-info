@@ -31,7 +31,7 @@ class AuthController extends Controller {
         ]);
         $validEmail = $formRequest->validData()['email'];
 
-        if (!$this->auth->attemt($validEmail, $password))
+        if (!$this->auth->attempt($validEmail, $password))
             Redirect::back([
                 "error" => "Invalid email or password!!"
             ]);

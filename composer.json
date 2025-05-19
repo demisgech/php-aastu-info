@@ -7,7 +7,7 @@
     },
     "files": [
       "App/Helpers/utils.php",
-      "App/Http/Routes/route.php"
+      "App/Http/Routes/routes.php"
     ]
   },
   "authors": [

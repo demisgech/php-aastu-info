@@ -10,14 +10,11 @@ class Router {
     private array $routes = [];
 
     private function add(string $path, mixed $handler, string $method) {
-        $this->routes[] = [
-            "path" => $this->normalizePath($path),
-            "controller" => $handler,
-            "method" => strtoupper($method),
-            "middleware" => null
-        ];
+        $route = new Route($this->normalizePath($path), strtoupper($method), $handler, null);
 
-        return $this;
+        $this->routes[] = $route;
+
+        return $route;
     }
 
     public function get(string $path, array $handler) {
@@ -47,24 +44,29 @@ class Router {
 
     public function route(string $url, string $method) {
         $path = $this->normalizePath(parse_url($url, PHP_URL_PATH));
-
         $method = strtoupper($method);
 
-        foreach ($this->routes as $route) {
-            $routePath = $route['path'];
+        // Sort: static routes (no {param}) before dynamic routes (with {param})
+        $sortedRoutes = $this->routes;
+        usort($sortedRoutes, fn($a, $b) => $a->isDynamic() <=> $b->isDynamic());
 
-            if ($route['middleware'])
-                Middleware::resolve($route['middleware']);
+        foreach ($sortedRoutes as $route) {
 
-            // Match dynamic segments like /users/{id}
+            $routePath = $route->path;
+            // // Convert dynamic segments to regex (e.g., /users/{id} => /users/([^/]+))
             $pattern = preg_replace('/\{[a-zA-Z_][a-zA-Z0-9_]*\}/', '([^/]+)', $routePath);
             $pattern = "@^" . $pattern . "$@D";
 
-            if ($route['method'] === $method && preg_match($pattern, $path, $matches)) {
+            if ($route->method === $method && preg_match($pattern, $path, $matches)) {
                 array_shift($matches); // Remove full match
 
-                [$class, $action] = $route['controller'];
+                [$class, $action] = $route->controller;
                 $controller = new $class();
+
+                // ✅ Middleware should run here, after match is confirmed
+                if ($route->middleware) {
+                    Middleware::resolve($route->middleware);
+                }
 
                 return call_user_func_array([$controller, $action], $matches);
             }

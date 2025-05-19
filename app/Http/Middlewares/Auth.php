@@ -8,7 +8,7 @@ use App\Http\Redirect;
 
 class Auth {
     public function handle(): void {
-        if (!$_SESSION['user'] ?? false)
+        if (!($_SESSION['user'] ?? false))
             Redirect::to("/unauthorize");
     }
 }
